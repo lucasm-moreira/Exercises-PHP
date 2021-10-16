@@ -1,6 +1,6 @@
 <h1>Exercises PHP</h1>
 
-These are some exercises using PHP POO. Also, it's possible to find a .txt containing some DDL SQL and Queries.
+These are some exercises using PHP POO. Also, it's possible to find a .txt containing some SQL commands as DDL and Queries.
 
 **Language:** PHP  
 **Version:** 8.0.11 
