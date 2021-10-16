@@ -4,7 +4,7 @@ These are some exercises using PHP POO. Also, it's possible to find a .txt conta
 
 **Language:** PHP  
 **Version:** 8.0.11 
-**Run on:** Console  
+**Run on:** Console   
 
 **How to run?**
 
