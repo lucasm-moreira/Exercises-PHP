@@ -3,7 +3,7 @@
 These are some exercises using PHP POO. Also, it's possible to find a .txt containing some SQL commands as DDL and Queries.
 
 **Language:** PHP  
-**Version:** 8.0.11 
+**Version:** 8.0.11 <br>
 **Run on:** Console   
 
 **How to run?**
