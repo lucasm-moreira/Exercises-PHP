@@ -1,0 +1,97 @@
+SQL - Modelo Relacional
+
+1 - Defina as cardinalidades máxima e mínima:
+
+	[Ator] (1, n) -> [Participa] -> (n, 1) [Filme]
+
+	[Filme] (1, n) -> [Dirige] -> (n, 1) [Diretor]
+
+2 - Cria o esquema do banco e apresente o DDL utlilizado.
+
+	create database locadora;
+
+	*Dentro do banco de dados*
+
+	create or replace table filme (
+		id int not null auto_increment,
+		titulo varchar(45) not null,
+		ano year(4) not null,
+		primary key(id)
+	);
+
+	create or replace table ator (
+		id int not null auto_increment,
+		nome varchar(45) not null,
+		primary key(id)
+	);
+
+	create or replace table diretor (
+		id int not null auto_increment,
+		nome varchar(45) not null,
+		primary key(id)
+	);
+
+	create or replace table participa (
+		id int not null auto_increment,
+		id_ator int not null,
+		id_filme int not null,
+		primary key(id),
+		foreign key(id_ator)
+		references ator(id),
+		foreign key(id_filme)
+		references filme(id)
+	);
+
+	create or replace table dirige(
+		id int not null auto_increment,
+		id_diretor int not null,
+		id_filme int not null,
+		primary key(id),
+		foreign key(id_diretor)
+		references diretor(id),
+		foreign key(id_filme)
+		references filme(id)
+	);
+
+3 - Apresente o SQL para as seguintes consultas:
+
+	Atores do filme com título "XYZ":
+
+	select a.id, a.nome from ator a
+	inner join participa p on p.id_ator = a.id
+	inner join filme f on f.id = p.id_filme
+	where f.titulo = 'XYZ';
+
+	Filmes que o ator com nome FULANO participou:
+
+	select distinct on (f.id) f.id, f.titulo, f.ano from filmes f
+	inner join participa p on p.id_filme = f.id
+	inner join ator a on a.id = p.id_ator
+	where a.nome = 'FULANO';
+
+	ou
+
+	select distinct on (f.id) f.id, f.titulo, f.ano from filmes f
+	inner join participa p on p.id_filme = f.id
+	inner join ator a on a.id = p.id_ator and p.id_ator = (select a.id from ator a where a.nome = 'FULANO' limit 1)
+
+	Listar os filmes do ano 2015 ordenados pela quantidade de atores participantes e pelo título em ordem alfabética:
+
+	select 
+	f.id as id, 
+	f.titulo as titulo, 
+	f.ano as ano,
+	(select count(p.id_ator) from participa p where p.id_filme = f.id) as quantidade_ator
+	from filmes f
+	where f.ano = 2015
+	group by id, titulo, ano, quantidade_ator
+	order by quantidade_ator asc, nome asc;
+	
+	Listar os atores que trabalharam em filmes cujo diretor foi “SPIELBERG”:
+
+	select distinct on (a.id) a.id, a.nome from ator a
+	inner join participa p on p.id_ator = a.id
+	inner join filme f on f.id = p.id_filme
+	inner join dirige d on d.id_filme = f.id
+	inner join diretor dr on dr.id = d.id_diretor
+	where dr.nome = "SPIELBERG";
